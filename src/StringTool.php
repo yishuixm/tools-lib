@@ -241,7 +241,7 @@ class StringTool {
      * 生成订单编号
      * @return string
      */
-    static public function  orderNumber(){
+    static public function  orderNumber($type='OD'){
         //生成24位唯一订单号码，格式：YYYY-MMDD-HHII-SS-NNNN,NNNN-CC，其中：
         //YYYY=年份，MM=月份，DD=日期，HH=24格式小时，II=分，SS=秒，NNNNNNNN=随机数，CC=检查码
 
@@ -264,7 +264,7 @@ class StringTool {
 
         //唯一订单号码（YYYYMMDDHHIISSNNNNNNNNCC）
 
-        return $order_id_main . str_pad((100 - $order_id_sum % 100) % 100, 2, '0', STR_PAD_LEFT);
+        return $type . $order_id_main . str_pad((100 - $order_id_sum % 100) % 100, 2, '0', STR_PAD_LEFT);
     }
 
 }
