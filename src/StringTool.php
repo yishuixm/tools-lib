@@ -245,4 +245,105 @@ class StringTool {
         return $type.date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
 
+
+    /**
+     * UBB代码转HTML
+     * @param $text
+     * @return mixed|string
+     */
+    static public function ubb2html($text) {
+        $text=trim($text);
+
+        $text=preg_replace("/\n/is","<br>",$text);
+        $text=preg_replace("/\\t/is","  ",$text);
+        $text=preg_replace("/\[hr\]/is","<hr>",$text);
+        $text=preg_replace("/\[separator\]/is","<br/>",$text);
+        $text=preg_replace("/\[h1\](.+?)\[\/h1\]/is","<h1>\\1</h1>",$text);
+        $text=preg_replace("/\[h2\](.+?)\[\/h2\]/is","<h2>\\1</h2>",$text);
+        $text=preg_replace("/\[h3\](.+?)\[\/h3\]/is","<h3>\\1</h3>",$text);
+        $text=preg_replace("/\[h4\](.+?)\[\/h4\]/is","<h4>\\1</h4>",$text);
+        $text=preg_replace("/\[h5\](.+?)\[\/h5\]/is","<h5>\\1</h5>",$text);
+        $text=preg_replace("/\[h6\](.+?)\[\/h6\]/is","<h6>\\1</h6>",$text);
+        $text=preg_replace("/\[center\](.+?)\[\/center\]/is","<center>\\1</center>",$text);
+        //$text=preg_replace("/\[url=([^\[]*)\](.+?)\[\/url\]/is","<a href=\\1 target='_blank'>\\2</a>",$text);
+        $text=preg_replace("/\[url\](.+?)\[\/url\]/is","<a href=\"\\1\" target='_blank'>\\1</a>",$text);
+        $text=preg_replace("/\[url=(http:\/\/.+?)\](.+?)\[\/url\]/is","<a href='\\1' target='_blank'>\\2</a>",$text);
+        $text=preg_replace("/\[url=(.+?)\](.+?)\[\/url\]/is","<a href=\\1>\\2</a>",$text);
+        $text=preg_replace("/\[img\](.+?)\[\/img\]/is","<img src=\\1>",$text);
+        $text=preg_replace("/\[img\s(.+?)\](.+?)\[\/img\]/is","<img \\1 src=\\2>",$text);
+        $text=preg_replace("/\[color=(.+?)\](.+?)\[\/color\]/is","<font color=\\1>\\2</font>",$text);
+        $text=preg_replace("/\[colorTxt\](.+?)\[\/colorTxt\]/eis","color_txt('\\1')",$text);
+        $text=preg_replace("/\[style=(.+?)\](.+?)\[\/style\]/is","<div class='\\1'>\\2</div>",$text);
+        $text=preg_replace("/\[size=(.+?)\](.+?)\[\/size\]/is","<font size=\\1>\\2</font>",$text);
+        $text=preg_replace("/\[sup\](.+?)\[\/sup\]/is","<sup>\\1</sup>",$text);
+        $text=preg_replace("/\[sub\](.+?)\[\/sub\]/is","<sub>\\1</sub>",$text);
+        $text=preg_replace("/\[pre\](.+?)\[\/pre\]/is","<pre>\\1</pre>",$text);
+        $text=preg_replace("/\[emot\](.+?)\[\/emot\]/eis","emot('\\1')",$text);
+        $text=preg_replace("/\[email\](.+?)\[\/email\]/is","<a href='mailto:\\1'>\\1</a>",$text);
+        $text=preg_replace("/\[i\](.+?)\[\/i\]/is","<i>\\1</i>",$text);
+        $text=preg_replace("/\[u\](.+?)\[\/u\]/is","<u>\\1</u>",$text);
+        $text=preg_replace("/\[b\](.+?)\[\/b\]/is","<b>\\1</b>",$text);
+        $text=preg_replace("/\[quote\](.+?)\[\/quote\]/is","<blockquote>引用:<div style='border:1px solid silver;background:#EFFFDF;color:#393939;padding:5px' >\\1</div></blockquote>", $text);
+        $text=preg_replace("/\[code\](.+?)\[\/code\]/eis","highlight_code('\\1')", $text);
+        $text=preg_replace("/\[php\](.+?)\[\/php\]/eis","highlight_code('\\1')", $text);
+        $text=preg_replace("/\[sig\](.+?)\[\/sig\]/is","<div style='text-align: left; color: darkgreen; margin-left: 5%'><br><br>--------------------------<br>\\1<br>--------------------------</div>", $text);
+        $text=preg_replace("/\[quote\](.+?)\[\/quote\]/is","<blockquote>引用:<div style='border:1px solid silver;background:#EFFFDF;color:#393939;padding:5px' >\\1</div></blockquote>", $text);
+
+        $text=preg_replace("/\[p=(.+?)\](.+?)\[\/p\]/is","<p class=\"\\1\">\\2</p>",$text);
+        $text=preg_replace("/\[p\](.+?)\[\/p\]/is","<p>\\1</p>",$text);
+        $text=preg_replace("/\[now\]/is",date('Y-m-d H:i:s'),$text);
+        $text=preg_replace("/\[year\]/is",date('Y'),$text);
+        return $text;
+    }
+
+    /**
+     * 秒数格式化
+     * @param $time
+     * @return bool|string
+     */
+    static public function sec2time($time){
+        if(is_numeric($time)){
+            $value = array(
+                "years" => 0, "days" => 0, "hours" => 0,
+                "minutes" => 0, "seconds" => 0,
+            );
+            if($time >= 31556926){
+                $value["years"] = floor($time/31556926);
+                $time = ($time%31556926);
+            }
+            if($time >= 86400){
+                $value["days"] = floor($time/86400);
+                $time = ($time%86400);
+            }
+            if($time >= 3600){
+                $value["hours"] = floor($time/3600);
+                $time = ($time%3600);
+            }
+            if($time >= 60){
+                $value["minutes"] = floor($time/60);
+                $time = ($time%60);
+            }
+            $value["seconds"] = floor($time);
+            //return (array) $value;
+            $t = '';
+            if($value["years"]){
+                $t.=$value["years"] ."年";
+            }
+            if($value["days"]){
+                $t.=$value["days"] ."天";
+            }
+            if($value["hours"]){
+                $t.=$value["hours"] ."小时";
+            }
+            if($value["minutes"]){
+                $t.=$value["minutes"] ."分";
+            }
+            $t.=$value["seconds"] ."秒";
+
+            return $t;
+        }else{
+            return (bool) FALSE;
+        }
+    }
+
 }
